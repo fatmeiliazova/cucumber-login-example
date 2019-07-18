@@ -1,4 +1,4 @@
-# Web & API Automation Project - Investor Platform
+# Web & API Automation Project
 *** Features of the Framework: ***
 -----
 -  Use of `Selenium Webdriver` for Web UI Automation
