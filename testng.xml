@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="BDD Test Suite" verbose="1" parallel="classes" thread-count="10" configfailurepolicy="continue">
+    <test name="Investor Platform Automation">
+        <classes>
+            <class name="com.qa.test.TestRunner"/>
+        </classes>
+    </test>
+</suite>

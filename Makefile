@@ -1,0 +1,2 @@
+target:
+        docker run qaautomationlendinvestcom_app mvn -Dtest=TestRunner -Drun.at=local -Dbrowser=chrome-headless -Ddeploy=true -Denv=${ENV} -Dno.attempts=1 "-Dcucumber.options=--tags @${TAG} " verify

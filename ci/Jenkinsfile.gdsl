@@ -1,0 +1,103 @@
+#!/usr/bin/env groovy
+
+pipeline {
+    agent any
+
+    //triggers {
+    //cron('H 6 * * *')
+    //upstream(upstreamProjects: 'projectname/branchname', threshold: hudson.model.Result.SUCCESS)
+    //}
+    parameters {
+        // choices are newline separated
+        choice(description: 'Which Test to execute?', name: 'TEST_NAME', choices: availableTest)
+        choice(description: 'Which environment to run the tests in?', name: 'ENV_NAME', choices: availableEnv)
+        choice(description: 'Which browser to run the tests in?', name: 'BROWSER_NAME', choices: availableBrowser)
+        choice(description: 'Deploy?', name: 'DEPLOY', choices: availableDeploy)
+        choice(description: 'Run at?', name: 'RUN_AT', choices: availableRunAt)
+    }
+
+    //environment {
+    //  SLACK_CHANNEL = "#tech-ci"
+    //}
+
+    stages {
+
+        stage('Building') {
+            steps {
+                checkout scm
+                sh '''
+                    #!/bin/bash
+                    ################# Removing Docker Images ###################
+                    if (docker images | grep 'investorautomation_app')
+                    then
+                    {
+                    docker rmi investorautomation_app
+                    echo "Removed docker image [cucumberloginexample_app]"
+                    }
+                    fi
+                    '''
+                echo 'Building...'
+                sh 'docker build -t cucumberloginexample:latest .'
+            }
+        }
+
+        stage('Testing') {
+            steps {
+                script {
+                    echo 'Started Testing...'
+                    echo "Environment: [${params.ENV_NAME}]"
+                    echo "Browser: [${params.BROWSER_NAME}]"
+                    echo "Test: [${params.TEST_NAME}]"
+                    echo "Deploy: [${params.DEPLOY}]"
+                    echo "Run at: [${params.RUN_AT}]"
+                    sh '''
+                    #!/bin/bash
+                    ################# Removing Docker Containers ###################
+                    if (docker ps -a | grep 'loginTest-container')
+                    then
+                    {
+                    docker rm investorTest-container
+                    echo "Removed docker container [investorTest-container]"
+                    }
+                    fi
+                    '''
+                    sh "docker run --name investorTest-container cucumberloginexample:latest mvn -Dtest=TestRunner -Drun.at=${params.RUN_AT} -Dbrowser=${params.BROWSER_NAME} -Ddeploy=${params.DEPLOY} -Denv=${params.ENV_NAME} -Dno.attempts=1 \"-Dcucumber.options=--tags @${params.TEST_NAME} \" test"
+                    sh "docker rm investorTest-container"
+                    sh "docker rmi cucumberloginexample"
+
+                }
+            }
+        }
+    }
+}
+
+import groovy.transform.Field
+@Field String[] selectTest = [
+        "login",
+]
+
+@Field String[] selectEnv = [
+        "env1",
+        "env2",
+        "env3"
+]
+
+@Field String[] selectBrowser = [
+        "Chrome-Headless"
+]
+
+@Field String[] selectDeploy = [
+        "true",
+        "false"
+]
+
+@Field String[] selectRunAt = [
+        "local",
+        "saucelabs"
+]
+
+@Field String availableTest = selectTest.inject("") { temp, val -> temp + val + "\n"}
+@Field String availableEnv = selectEnv.inject("") { temp, val -> temp + val + "\n"}
+@Field String availableBrowser = selectBrowser.inject("") { temp, val -> temp + val + "\n"}
+@Field String availableDeploy = selectDeploy.inject("") { temp, val -> temp + val + "\n"}
+@Field String availableRunAt = selectRunAt.inject("") { temp, val -> temp + val + "\n"}

@@ -1,0 +1,33 @@
+pipeline {
+    agent { docker 'maven:3-alpine' }
+    
+    parameters {
+        choice (
+            choices: "qa1\nqa2\n",
+            description: 'environment to run the test',
+            name : 'env')
+        string (
+            defaultValue: 'gk',
+            description: 'tell cucumber which tests from the suite to run. e.g. "FCA", "Auto-Invest". You can find tags at: https://github.com/lend-invest/qa.automation.lendinvest.com/tree/master/src/test/features',
+            name : 'cucumberoptions')
+    }
+     
+    stages {
+        stage('Compile') {
+            steps {
+            	echo "Tests will run on: ${params.env}"
+            	echo "Test suite to run is: @${params.cucumberoptions}"
+                sh 'mvn clean compile'
+            }
+        }
+        stage('Tests') {
+            steps {
+                sauce('saucelabs-italo') {
+                    sauceconnect(useGeneratedTunnelIdentifier: true, verboseLogging: true) {
+                        sh """ mvn exec:java -Drun.at=saucelabs -Denv=${params.env} -Dload.fixtures=no -Dno.attempts=0 -Dcucumber.options="--tags @${params.cucumberoptions}" verify """
+                    }
+                }
+            }
+        }
+    }
+}
