@@ -2,13 +2,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>LendinvestQA</groupId>
-    <artifactId>InvestorAutomation</artifactId>
-    <version>1.0-INV-InvestorAutomation</version>
+    <groupId>LoginQA</groupId>
+    <artifactId>Automation</artifactId>
+    <version>1.0-LoginAutomation</version>
     <packaging>jar</packaging>
 
 
-    <name>InvestorAutomation</name>
+    <name>LoginAutomation</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -136,11 +136,6 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-csv</artifactId>
             <version>${apache.commons.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.pdfbox</groupId>
-            <artifactId>pdfbox</artifactId>
-            <version>${apache.pdfbox.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven.plugins</groupId>
