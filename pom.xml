@@ -27,7 +27,7 @@
         <maven.compiler.plugin.version>3.6.1</maven.compiler.plugin.version>
         <maven.resources.plugin.version>3.0.2</maven.resources.plugin.version>
         <maven.surefire.version>3.0.0-M3</maven.surefire.version>
-        <mysql.connector.version>6.0.6</mysql.connector.version>
+        <mysql.connector.version>8.0.28</mysql.connector.version>
         <opencsv.version>4.2</opencsv.version>
         <plexus.version>3.0.8</plexus.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
