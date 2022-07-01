@@ -29,7 +29,7 @@
         <maven.surefire.version>3.0.0-M3</maven.surefire.version>
         <mysql.connector.version>6.0.6</mysql.connector.version>
         <opencsv.version>4.2</opencsv.version>
-        <plexus.version>3.0.8</plexus.version>
+        <plexus.version>3.0.16</plexus.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <restassured.version>3.3.0</restassured.version>
         <saucelabs.junit.version>2.1.21</saucelabs.junit.version>
